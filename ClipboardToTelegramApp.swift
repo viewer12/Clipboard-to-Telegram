@@ -125,17 +125,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     func applicationWillTerminate(_ aNotification: Notification) {
         }
     func sendTextToTelegramBot(text: String) {
-        
-        let urlString = "https://api.telegram.org/bot\(botToken)/sendMessage?chat_id=\(chatID)&text=\(text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")"
-        
+        let monospaceText = "```\n\(text)\n```"
+        let urlString = "https://api.telegram.org/bot\(botToken)/sendMessage?chat_id=\(chatID)&text=\(monospaceText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&parse_mode=MarkdownV2"
+
         guard let url = URL(string: urlString) else { return }
-        
+
         URLSession.shared.dataTask(with: url) { _, _, _ in
         }.resume()
-        
-        print("Sending text message to Telegram bot: \(text)")
 
-        
+        print("Sending text message to Telegram bot: \(text)")
     }
     
     func sendImageToTelegramBot(image: NSImage) {
